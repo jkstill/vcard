@@ -36,10 +36,11 @@ while (<>) {
 			my $vCard = vCard->new;
 			$hr->{photo} = '';
 			$vCard->load_hashref($hr);
+			$vCard->version('3.0');
 			$vCard->as_file($vCardFile);
 
 			#as_file($vCardFile
-			print "HR: ", Dumper($hr);
+			print "HR: ", Dumper($hr) if $debug;
 		}
 		$newRecord = 0;
 		next;
@@ -77,7 +78,7 @@ while (<>) {
 	} elsif ( $lineType eq $recordTypes[cellPhonePos] ) {
 		my @phones = split(/\s+/,$line);
 		@phones = @phones[1..$#phones];
-		push @{$hr->{phones}} , { type => ['home', 'text'], number => join('',@phones) };
+		push @{$hr->{phones}} , { type => ['mobile', 'text'], number => join('',@phones) };
 	} elsif ( $lineType eq $recordTypes[emailPos] ) {
 		my @emails = split(/\s+/,$line);
 		push @{$hr->{email_addresses}} , { type => ['home'], address => $emails[1] };
